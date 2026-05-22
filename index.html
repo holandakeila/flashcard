@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>ODS 12 — Meta 12.3 | Flashcards</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body style="margin:0;padding:0;">
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const cards = [
+  { statement: "A meta 12.3 da ODS 12 tem como objetivo reduzir pela metade o desperdício de alimentos per capita global até 2030.", answer: true, explanation: "Correto! A meta 12.3 estabelece exatamente isso: reduzir à metade o desperdício de alimentos no varejo e no consumidor, e reduzir as perdas ao longo das cadeias de produção e abastecimento até 2030." },
+  { statement: "Cerca de 10% dos alimentos produzidos no mundo são desperdiçados anualmente.", answer: false, explanation: "Incorreto! Estima-se que aproximadamente 1/3 de todos os alimentos produzidos no mundo — cerca de 1,3 bilhão de toneladas — são perdidos ou desperdiçados a cada ano, segundo a FAO." },
+  { statement: "O consumo sustentável significa consumir apenas o estritamente necessário para a sobrevivência.", answer: false, explanation: "Incorreto! Consumo sustentável é satisfazer as necessidades atuais sem comprometer as gerações futuras. Não significa abrir mão do bem-estar, mas escolher produtos e serviços de forma consciente e responsável." },
+  { statement: "Reutilizar embalagens e comprar a granel são práticas que contribuem para o consumo sustentável.", answer: true, explanation: "Correto! Essas ações reduzem a geração de resíduos, diminuem o consumo de matéria-prima e contribuem diretamente para padrões de produção e consumo mais sustentáveis." },
+  { statement: "O desperdício de alimentos ocorre apenas na etapa do consumo final, ou seja, nas casas das pessoas.", answer: false, explanation: "Incorreto! O desperdício acontece em toda a cadeia: na produção, no processamento, no transporte, no varejo e no consumo. Cada etapa contribui para a perda total de alimentos." },
+  { statement: "Planejar as compras do supermercado com uma lista ajuda a reduzir o desperdício de alimentos.", answer: true, explanation: "Correto! Planejar as compras evita a aquisição de itens desnecessários que podem estragar antes de serem consumidos, sendo uma prática simples e eficaz de consumo consciente." },
+  { statement: "A economia circular é um modelo que vai contra os princípios do consumo sustentável.", answer: false, explanation: "Incorreto! A economia circular é totalmente alinhada ao consumo sustentável. Ela propõe manter produtos e materiais em uso pelo maior tempo possível, reduzindo o desperdício e o impacto ambiental." },
+  { statement: "O desperdício de alimentos também representa um desperdício de recursos como água, energia e terra.", answer: true, explanation: "Correto! Produzir alimentos que serão descartados consome água, energia, fertilizantes e terra de forma desnecessária, gerando impactos ambientais significativos sem nenhum benefício." },
+  { statement: "Preferir produtos com certificação ambiental é uma forma de exercer o consumo sustentável.", answer: true, explanation: "Correto! Certificações ambientais garantem que o produto foi fabricado com menor impacto ao meio ambiente. Ao escolhê-los, o consumidor estimula práticas mais responsáveis pelas empresas." },
+  { statement: "O fast fashion (moda rápida) é considerado um exemplo de produção e consumo sustentável.", answer: false, explanation: "Incorreto! O fast fashion é um dos setores mais poluentes do mundo. Produz roupas em excesso, com materiais de baixa qualidade, gerando enorme quantidade de resíduos e exploração de recursos naturais." },
+  { statement: "Doar alimentos próximos ao vencimento para bancos de alimentos é uma prática alinhada à meta 12.3.", answer: true, explanation: "Correto! Redirecionar alimentos ainda próprios para consumo, em vez de descartá-los, reduz o desperdício e promove segurança alimentar — valores centrais da meta 12.3 da ODS 12." },
+  { statement: "Países de baixa renda desperdiçam mais alimentos na etapa do consumo final do que países ricos.", answer: false, explanation: "Incorreto! Em países ricos, o desperdício ocorre mais na etapa do consumo (supermercados e domicílios). Em países de baixa renda, as perdas são maiores nas etapas de produção e armazenamento, por falta de infraestrutura." },
+  { statement: "Reduzir o consumo de carne pode contribuir para a sustentabilidade ambiental.", answer: true, explanation: "Correto! A produção de carne, especialmente bovina, demanda grandes quantidades de água, terra e energia, além de gerar emissões de gases de efeito estufa. Reduzir seu consumo tem impacto ambiental positivo." },
+  { statement: "A ODS 12 se aplica apenas a empresas e governos, não aos cidadãos comuns.", answer: false, explanation: "Incorreto! A ODS 12 envolve todos os atores: governos, empresas E consumidores. Cada escolha individual de consumo tem impacto coletivo e contribui — ou não — para padrões mais sustentáveis." },
+  { statement: "Comprar produtos locais e sazonais é uma forma de consumo mais sustentável.", answer: true, explanation: "Correto! Produtos locais percorrem menos distância até o consumidor, reduzindo emissões de transporte. Produtos sazonais exigem menos recursos para produção. Ambos são escolhas mais sustentáveis e geralmente mais saudáveis." }
+];
+
+const TOTAL = cards.length;
+
+function App() {
+  const [current, setCurrent] = useState(0);
+  const [flipped, setFlipped] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [score, setScore] = useState(0);
+  const [finished, setFinished] = useState(false);
+  const [answers, setAnswers] = useState([]);
+
+  const card = cards[current];
+
+  const handleAnswer = (val) => {
+    if (selected !== null) return;
+    setSelected(val);
+    setFlipped(true);
+    const correct = val === card.answer;
+    if (correct) setScore(s => s + 1);
+    setAnswers(a => [...a, { correct }]);
+  };
+
+  const handleNext = () => {
+    if (current + 1 >= TOTAL) { setFinished(true); }
+    else { setCurrent(c => c + 1); setFlipped(false); setSelected(null); }
+  };
+
+  const handleRestart = () => {
+    setCurrent(0); setFlipped(false); setSelected(null);
+    setScore(0); setFinished(false); setAnswers([]);
+  };
+
+  const pct = Math.round((score / TOTAL) * 100);
+
+  if (finished) {
+    let msg, emoji;
+    if (pct >= 80) { msg = "Excelente! Você é um(a) campeão(ã) do consumo sustentável!"; emoji = "🏆"; }
+    else if (pct >= 60) { msg = "Bom trabalho! Continue aprendendo sobre sustentabilidade."; emoji = "🌿"; }
+    else { msg = "Continue estudando! O planeta precisa de você."; emoji = "🌍"; }
+    return (
+      <div style={s.bg}>
+        <div style={s.card}>
+          <div style={{fontSize:64,marginBottom:8}}>{emoji}</div>
+          <h2 style={s.title}>Resultado Final</h2>
+          <div style={s.scoreBig}>{score} / {TOTAL}</div>
+          <div style={s.pct}>{pct}% de acertos</div>
+          <p style={s.msg}>{msg}</p>
+          <div style={s.barBg}>
+            <div style={{...s.barFill, width:`${pct}%`, background: pct>=80?'#22c55e':pct>=60?'#f59e0b':'#ef4444'}} />
+          </div>
+          <button style={s.btnRestart} onClick={handleRestart}>🔄 Jogar Novamente</button>
+          <p style={s.ods}>ODS 12 — Meta 12.3 | Consumo Sustentável</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={s.bg}>
+      <div style={s.header}>
+        <span style={s.headerTitle}>🌱 ODS 12 — Meta 12.3</span>
+        <span style={s.counter}>{current + 1} / {TOTAL}</span>
+      </div>
+      <div style={s.progressBg}>
+        <div style={{...s.progressFill, width:`${(current/TOTAL)*100}%`}} />
+      </div>
+      <div style={s.card}>
+        <div style={s.badge}>Verdadeiro ou Falso?</div>
+        <p style={s.statement}>{card.statement}</p>
+        {!flipped && (
+          <div style={s.btnRow}>
+            <button style={s.btnTrue} onClick={() => handleAnswer(true)}>✅ Verdadeiro</button>
+            <button style={s.btnFalse} onClick={() => handleAnswer(false)}>❌ Falso</button>
+          </div>
+        )}
+        {flipped && (
+          <div style={{...s.feedback, background: selected===card.answer?'#dcfce7':'#fee2e2', borderColor: selected===card.answer?'#22c55e':'#ef4444'}}>
+            <div style={s.feedbackIcon}>{selected===card.answer?'✅ Correto!':'❌ Incorreto!'}</div>
+            <p style={s.explanation}>{card.explanation}</p>
+            <button style={s.btnNext} onClick={handleNext}>
+              {current+1>=TOTAL?'Ver Resultado →':'Próximo →'}
+            </button>
+          </div>
+        )}
+      </div>
+      <div style={s.scoreRow}>
+        <span style={s.scoreText}>⭐ Pontuação: {score}</span>
+        <span style={s.scoreText}>
+          {answers.map((a,i) => <span key={i} style={{marginLeft:2}}>{a.correct?'🟢':'🔴'}</span>)}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+const s = {
+  bg: { minHeight:'100vh', background:'linear-gradient(135deg,#e8f5e9 0%,#f1f8e9 100%)', display:'flex', flexDirection:'column', alignItems:'center', padding:'24px 16px', fontFamily:'system-ui,sans-serif' },
+  header: { width:'100%', maxWidth:560, display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8 },
+  headerTitle: { fontWeight:700, color:'#166534', fontSize:16 },
+  counter: { background:'#166534', color:'#fff', borderRadius:20, padding:'2px 12px', fontSize:14, fontWeight:600 },
+  progressBg: { width:'100%', maxWidth:560, height:8, background:'#bbf7d0', borderRadius:8, marginBottom:20 },
+  progressFill: { height:8, background:'#16a34a', borderRadius:8, transition:'width 0.4s' },
+  card: { background:'#fff', borderRadius:20, boxShadow:'0 4px 24px rgba(0,0,0,0.10)', padding:'32px 28px', width:'100%', maxWidth:560, marginBottom:16 },
+  badge: { display:'inline-block', background:'#dcfce7', color:'#166534', borderRadius:20, padding:'4px 14px', fontSize:13, fontWeight:600, marginBottom:16 },
+  statement: { fontSize:18, lineHeight:1.6, color:'#1a1a1a', marginBottom:28, fontWeight:500 },
+  btnRow: { display:'flex', gap:12 },
+  btnTrue: { flex:1, padding:'14px 0', borderRadius:12, border:'none', background:'#16a34a', color:'#fff', fontSize:16, fontWeight:700, cursor:'pointer' },
+  btnFalse: { flex:1, padding:'14px 0', borderRadius:12, border:'none', background:'#dc2626', color:'#fff', fontSize:16, fontWeight:700, cursor:'pointer' },
+  feedback: { borderRadius:14, border:'2px solid', padding:'18px 20px' },
+  feedbackIcon: { fontWeight:700, fontSize:17, marginBottom:8 },
+  explanation: { fontSize:15, lineHeight:1.6, color:'#374151', marginBottom:16 },
+  btnNext: { width:'100%', padding:'12px 0', borderRadius:10, border:'none', background:'#166534', color:'#fff', fontSize:15, fontWeight:700, cursor:'pointer' },
+  scoreRow: { width:'100%', maxWidth:560, display:'flex', justifyContent:'space-between', alignItems:'center', padding:'0 4px' },
+  scoreText: { color:'#166534', fontWeight:600, fontSize:14 },
+  scoreBig: { fontSize:52, fontWeight:800, color:'#166534', margin:'8px 0' },
+  pct: { fontSize:22, color:'#15803d', fontWeight:600, marginBottom:8 },
+  msg: { fontSize:16, color:'#374151', marginBottom:20, textAlign:'center' },
+  barBg: { width:'100%', height:14, background:'#e5e7eb', borderRadius:8, marginBottom:24, overflow:'hidden' },
+  barFill: { height:14, borderRadius:8, transition:'width 0.6s' },
+  btnRestart: { width:'100%', padding:'14px 0', borderRadius:12, border:'none', background:'#166534', color:'#fff', fontSize:16, fontWeight:700, cursor:'pointer', marginBottom:16 },
+  ods: { fontSize:13, color:'#6b7280', textAlign:'center' },
+  title: { fontSize:26, fontWeight:800, color:'#166534', margin:'0 0 4px' },
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
